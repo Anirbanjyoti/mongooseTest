@@ -5,6 +5,9 @@ require("dotenv").config();
 const app = express();
 const port = process.env.PORT || 5000;
 
+// Import Mongoose Router
+const todoHandler = "./routes/todoHandler.js"
+
 // Middle ware initialization
 app.use(cors());
 app.use(express.json());
