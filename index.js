@@ -15,8 +15,6 @@ async function run() {
   try {
     //application Router
     app.use("/student", studentHandler);
-
-
   } finally {
     // await client.close();
   }

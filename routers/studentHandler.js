@@ -7,12 +7,12 @@ const studentSchema = require("../models/studentSchema");
 const Student = new mongoose.model("Student", studentSchema);
 
 // Get ALl The Student
-router.get("/", async (req, res) => {
-  await Student.find({ status: "active" })
+router.get("/", (req, res) => {
+  Student.find({ status: "active" })
     .select({
       date: 0,
     })
-    .limit(2)
+    .limit(3)
     .exec((err, data) => {
       if (err) {
         res.status(500).json({
@@ -28,43 +28,35 @@ router.get("/", async (req, res) => {
 });
 // Get a single Student by id
 router.get("/:id", async (req, res) => {
-  await Student.find({ _id: req.params.id }, (err, data) => {
-    if (err) {
-      res.status(500).json({
-        error: "There was server side error",
-      });
-    } else {
-      res.status(200).json({
-        result: data,
-        message: "Success",
-      });
-    }
-  }).clone();
+  try {
+    const data = await Student.find({ _id: req.params.id }).clone();
+    res.status(200).json({
+      result: data,
+      message: "Success",
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: "There was server side error",
+    });
+  }
 });
 // POST/create a single Student
 router.post("/", async (req, res) => {
-  const newStudent = new Student(req.body);
-  await newStudent.save((err) => {
-    if (err) {
-      res.status(500).json({
-        error: "There was server side error",
-      });
-    } else {
-      res.status(200).json({
-        message: "Student record inserted successfully",
-      });
-    }
-  });
-  // .then(() => {
-  //   res.status(201).send(newStudent);
-  // })
-  // .catch((e) => {
-  //   res.status(400).send(e);
-  // });
+  try {
+    const newStudent = new Student(req.body);
+    await newStudent.save();
+    res.status(200).json({
+      message: "Student record inserted successfully",
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: "There was server side error",
+    });
+  }
 });
 //POST/create multiple Student
-router.post("/all", async (req, res) => {
-  await Student.insertMany(req.body, (err) => {
+router.post("/all", (req, res) => {
+  Student.insertMany(req.body, (err) => {
     if (err) {
       res.status(500).json({
         error: "There was server side error",
@@ -77,8 +69,8 @@ router.post("/all", async (req, res) => {
   });
 });
 //Put Student
-router.put("/:id", async (req, res) => {
-  await Student.updateOne(
+router.put("/:id", (req, res) => {
+  Student.updateOne(
     { _id: req.params.id },
     {
       $set: {
@@ -99,8 +91,8 @@ router.put("/:id", async (req, res) => {
   ).clone();
 });
 //Delete Student
-router.delete("/:id", async (req, res) => {
-  await Student.deleteOne({ _id: req.params.id }, (err) => {
+router.delete("/:id", (req, res) => {
+  Student.deleteOne({ _id: req.params.id }, (err) => {
     if (err) {
       res.status(500).json({
         error: "There was server side error",
