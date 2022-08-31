@@ -28,6 +28,9 @@ studentSchema.methods = {
   findActive: ()=> {
     return mongoose.model("Student").find({ status: "active" });
   },
+  findActiveCallback: (cb)=> {
+    return mongoose.model("Student").find({ status: "active" }, cb);
+  },
 };
 
 module.exports = studentSchema;
