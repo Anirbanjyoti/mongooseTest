@@ -9,8 +9,6 @@ const Student = new mongoose.model("Student", studentSchema);
 // Get ALl The Student
 router.get("/", async (req, res) => {
   await Student.find({status:"active"}).select({
-    _id: 0,
-    _v: 0,
     date: 0
   })
   .limit(2)
@@ -22,14 +20,26 @@ router.get("/", async (req, res) => {
     } else {
       res.status(200).json({
         result: data,
-        message: "Student record inserted successfully",
+        message: "success",
       });
     }
   })
 });
-
 // Get a single Student by id
-router.get("/:id", async (req, res) => {});
+router.get("/:id", async (req, res) => {
+  await Student.find({_id: req.params.id}, (err, data)=>{
+    if (err) {
+      res.status(500).json({
+        error: "There was server side error",
+      });
+    } else {
+      res.status(200).json({
+        result: data,
+        message: "Success",
+      });
+    }
+  }).clone();
+});
 // POST/create a single Student
 router.post("/", async (req, res) => {
   const newStudent = new Student(req.body);
@@ -51,7 +61,6 @@ router.post("/", async (req, res) => {
   //   res.status(400).send(e);
   // });
 });
-
 //POST/create multiple Student
 router.post("/all", async (req, res) => {
   await Student.insertMany(req.body, (err) => {
@@ -73,7 +82,7 @@ router.put("/:id", async (req, res) => {
     {
       $set: {
         status: "inactive",
-      },
+      }
     },
     (err) => {
       if (err) {
@@ -86,7 +95,7 @@ router.put("/:id", async (req, res) => {
         });
       }
     }
-  );
+  ).clone();
 });
 //Delete Student
 router.delete("/:id", async (req, res) => {});
