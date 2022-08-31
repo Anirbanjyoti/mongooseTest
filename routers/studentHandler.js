@@ -8,26 +8,27 @@ const Student = new mongoose.model("Student", studentSchema);
 
 // Get ALl The Student
 router.get("/", async (req, res) => {
-  await Student.find({status:"active"}).select({
-    date: 0
-  })
-  .limit(2)
-  .exec((err, data)=>{
-    if (err) {
-      res.status(500).json({
-        error: "There was server side error",
-      });
-    } else {
-      res.status(200).json({
-        result: data,
-        message: "success",
-      });
-    }
-  })
+  await Student.find({ status: "active" })
+    .select({
+      date: 0,
+    })
+    .limit(2)
+    .exec((err, data) => {
+      if (err) {
+        res.status(500).json({
+          error: "There was server side error",
+        });
+      } else {
+        res.status(200).json({
+          result: data,
+          message: "success",
+        });
+      }
+    });
 });
 // Get a single Student by id
 router.get("/:id", async (req, res) => {
-  await Student.find({_id: req.params.id}, (err, data)=>{
+  await Student.find({ _id: req.params.id }, (err, data) => {
     if (err) {
       res.status(500).json({
         error: "There was server side error",
@@ -82,7 +83,7 @@ router.put("/:id", async (req, res) => {
     {
       $set: {
         status: "inactive",
-      }
+      },
     },
     (err) => {
       if (err) {
@@ -98,6 +99,18 @@ router.put("/:id", async (req, res) => {
   ).clone();
 });
 //Delete Student
-router.delete("/:id", async (req, res) => {});
+router.delete("/:id", async (req, res) => {
+  await Student.deleteOne({ _id: req.params.id }, (err) => {
+    if (err) {
+      res.status(500).json({
+        error: "There was server side error",
+      });
+    } else {
+      res.status(200).json({
+        message: "Student record has been Deleted",
+      });
+    }
+  }).clone();
+});
 
 module.exports = router;
