@@ -1,34 +1,20 @@
 const express = require("express");
-const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv").config();
+require("./database/connect");
 const app = express();
 const port = process.env.PORT || 5000;
-
 // Import Mongoose Router
-const todoHandler = "./routes/todoHandler.js"
+const studentHandler = require("./routers/studentHandler");
 
 // Middle ware initialization
 app.use(cors());
 app.use(express.json());
 
-// Database connection with mongoose
-mongoose
-  .connect(
-    `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.ov3k2vn.mongodb.net/?retryWrites=true&w=majority/mongooseTest`,
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    }
-  )
-  .then(() => console.log(`Mongodb Connected Successfully with Mongoose`));
-
 async function run() {
   try {
     //application Router
-    app.use('/todo', todoHandler)
-
-
+    app.use("/student", studentHandler);
 
 
   } finally {
