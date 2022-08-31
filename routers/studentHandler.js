@@ -26,6 +26,21 @@ router.get("/", (req, res) => {
       }
     });
 });
+// instance / custom method
+router.get("/active", async (req, res) => {
+  try {
+    const std = new Student();
+    const data = await std.findActive();
+    res.status(200).json({
+      result: data,
+      message: "Success",
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: "There was server side error",
+    });
+  }
+});
 // Get a single Student by id
 router.get("/:id", async (req, res) => {
   try {
