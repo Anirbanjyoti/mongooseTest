@@ -12,7 +12,9 @@ router.get("/", async (req, res) => {
     _id: 0,
     _v: 0,
     date: 0
-  }).exec((err, data)=>{
+  })
+  .limit(2)
+  .exec((err, data)=>{
     if (err) {
       res.status(500).json({
         error: "There was server side error",
