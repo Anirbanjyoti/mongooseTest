@@ -26,6 +26,20 @@ router.get("/", (req, res) => {
       }
     });
 });
+// Static method
+router.get("/name", async (req, res) => {
+  try {
+    const data = await Student.findByJs();
+    res.status(200).json({
+      result: data,
+      message: "Success",
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: "There was server side error",
+    });
+  }
+});
 // instance / custom method
 router.get("/active", async (req, res) => {
   try {
@@ -43,21 +57,21 @@ router.get("/active", async (req, res) => {
 });
 // instance / custom method by call-back function just for learn and understand DOCUMENTATION (output is same)
 router.get("/active-callback", async (req, res) => {
- 
-    const std = new Student();
-    std.findActiveCallback((err, data)=>{
-      if(err){
-        res.status(500).json({
-          error: "There was server side error",
-        });
-      }else{
-        res.status(200).json({
-          result: data,
-          message: "Success",
-        });
-      }
-    });
+  const std = new Student();
+  std.findActiveCallback((err, data) => {
+    if (err) {
+      res.status(500).json({
+        error: "There was server side error",
+      });
+    } else {
+      res.status(200).json({
+        result: data,
+        message: "Success",
+      });
+    }
+  });
 });
+
 // Get a single Student by id
 router.get("/:id", async (req, res) => {
   try {

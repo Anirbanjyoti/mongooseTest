@@ -25,11 +25,17 @@ const studentSchema = new mongoose.Schema({
 });
 // Mongoose Instance Method /custom method /active student
 studentSchema.methods = {
-  findActive: ()=> {
+  findActive: () => {
     return mongoose.model("Student").find({ status: "active" });
   },
-  findActiveCallback: (cb)=> {
+  findActiveCallback: (cb) => {
     return mongoose.model("Student").find({ status: "active" }, cb);
+  },
+};
+// Statics methods note: ( statics method always will be old function structures )
+studentSchema.statics = {
+  findByJs: function(){
+    return this.find({ name: /jyoti/i });
   },
 };
 
