@@ -38,5 +38,14 @@ studentSchema.statics = {
     return this.find({ name: /jyoti/i });
   },
 };
+// Query Helper 
+studentSchema.query = {
+  ByEmail: function(email){
+    return this.find({ email: new RegExp(email, "i") });
+  },
+  ByName: function(name){
+    return this.find({ name: new RegExp(name, "i") });
+  },
+};
 
 module.exports = studentSchema;

@@ -26,20 +26,6 @@ router.get("/", (req, res) => {
       }
     });
 });
-// Static method
-router.get("/name", async (req, res) => {
-  try {
-    const data = await Student.findByJs();
-    res.status(200).json({
-      result: data,
-      message: "Success",
-    });
-  } catch (err) {
-    res.status(500).json({
-      error: "There was server side error",
-    });
-  }
-});
 // instance / custom method
 router.get("/active", async (req, res) => {
   try {
@@ -71,7 +57,34 @@ router.get("/active-callback", async (req, res) => {
     }
   });
 });
-
+// Static method
+router.get("/name", async (req, res) => {
+  try {
+    const data = await Student.findByJs();
+    res.status(200).json({
+      result: data,
+      message: "Success",
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: "There was server side error",
+    });
+  }
+});
+// Query Helper
+router.get("/email", async (req, res) => {
+  try {
+    const data = await Student.find().ByEmail("bd").ByName("jyoti");
+    res.status(200).json({
+      result: data,
+      message: "Success",
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: "There was server side error",
+    });
+  }
+});
 // Get a single Student by id
 router.get("/:id", async (req, res) => {
   try {
